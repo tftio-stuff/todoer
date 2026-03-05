@@ -18,6 +18,23 @@ cargo run -- list
 cargo run -- task update status <uuid> COMPLETED
 ```
 
+## Release how-to
+
+Prereqs:
+- GitHub Actions secrets: `CARGO_REGISTRY_TOKEN` set to your crates.io token.
+- `just` installed.
+
+Release flow:
+1. Start a release branch and bump version:
+```
+just release-start 1.2.3
+```
+2. Open a PR from `release/v1.2.3` to `main` and merge after CI passes.
+3. Tag and push the release (triggers publish):
+```
+just release-tag 1.2.3
+```
+
 ## Install (dev)
 
 ```
