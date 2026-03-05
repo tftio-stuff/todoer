@@ -1,7 +1,9 @@
 [package]
 name = "todoer"
-version = "1.0.3"
+version = "1.0.4"
 edition = "2021"
+description = "A command line tool for managing a global todo list, designed for LLM agents."
+license = "CC0-1.0"
 
 [dependencies]
 clap = { version = "4", features = ["derive"] }
