@@ -38,3 +38,25 @@ pub fn load_project_name(path: &Path) -> anyhow::Result<String> {
     }
     Ok(pf.project)
 }
+
+pub fn resolve_project(
+    project_override: Option<&str>,
+    discovered: Option<String>,
+    cwd: &Path,
+    home: &Path,
+) -> anyhow::Result<ResolvedProject> {
+    if let Some(p) = project_override {
+        let key = crate::models::normalize_project_key(p);
+        return Ok(ResolvedProject { name: p.to_string(), key });
+    }
+    if let Some(p) = discovered {
+        let key = crate::models::normalize_project_key(&p);
+        return Ok(ResolvedProject { name: p, key });
+    }
+    if let Some(path) = find_project_file(cwd, home)? {
+        let name = load_project_name(&path)?;
+        let key = crate::models::normalize_project_key(&name);
+        return Ok(ResolvedProject { name, key });
+    }
+    anyhow::bail!("no project")
+}
