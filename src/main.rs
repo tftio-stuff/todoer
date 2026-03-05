@@ -70,7 +70,8 @@ fn run(cli: Cli) -> i32 {
                 Ok(d) => d,
                 Err(e) => return print_error("new", json, e),
             };
-            let proj = match resolve_project(project.as_deref(), discovered, &cwd, &home) {
+            let git_name = git_repo_name(&cwd);
+            let proj = match resolve_project(project.as_deref(), discovered, &cwd, &home, git_name.as_deref()) {
                 Ok(p) => p,
                 Err(e) => return print_error("new", json, e),
             };
@@ -111,7 +112,8 @@ fn run(cli: Cli) -> i32 {
                     Ok(d) => d,
                     Err(e) => return print_error("list", json, e),
                 };
-                match resolve_project(project.as_deref(), discovered, &cwd, &home) {
+                let git_name = git_repo_name(&cwd);
+                match resolve_project(project.as_deref(), discovered, &cwd, &home, git_name.as_deref()) {
                     Ok(p) => Some(p),
                     Err(e) => return print_error("list", json, e),
                 }

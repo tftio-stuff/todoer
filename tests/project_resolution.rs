@@ -10,7 +10,7 @@ fn resolves_project_from_todoer_file() {
     fs::create_dir_all(&sub).unwrap();
     fs::write(root.join(".todoer.toml"), "project = \"Name\"").unwrap();
 
-    let proj = resolve_project(None, None, &sub, &root).unwrap();
+    let proj = resolve_project(None, None, &sub, &root, None).unwrap();
     assert_eq!(proj.name, "Name");
 }
 
@@ -21,5 +21,15 @@ fn init_falls_back_to_git_name() {
     fs::create_dir_all(&root).unwrap();
 
     let proj = resolve_init_project(None, &root, &root, Some("gitrepo")).unwrap();
+    assert_eq!(proj.name, "gitrepo");
+}
+
+#[test]
+fn non_init_falls_back_to_git_name_when_no_todoer() {
+    let dir = tempdir().unwrap();
+    let root = dir.path().join("repo");
+    fs::create_dir_all(&root).unwrap();
+
+    let proj = resolve_project(None, None, &root, &root, Some("gitrepo")).unwrap();
     assert_eq!(proj.name, "gitrepo");
 }

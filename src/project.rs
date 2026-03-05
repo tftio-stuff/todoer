@@ -44,6 +44,7 @@ pub fn resolve_project(
     discovered: Option<String>,
     cwd: &Path,
     home: &Path,
+    git_name: Option<&str>,
 ) -> anyhow::Result<ResolvedProject> {
     if let Some(p) = project_override {
         let key = crate::models::normalize_project_key(p);
@@ -57,6 +58,10 @@ pub fn resolve_project(
         let name = load_project_name(&path)?;
         let key = crate::models::normalize_project_key(&name);
         return Ok(ResolvedProject { name, key });
+    }
+    if let Some(g) = git_name {
+        let key = crate::models::normalize_project_key(g);
+        return Ok(ResolvedProject { name: g.to_string(), key });
     }
     anyhow::bail!("no project")
 }
